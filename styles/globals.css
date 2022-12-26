@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* font */
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Mulish&family=Nunito+Sans&family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Mulish&display=swap');
