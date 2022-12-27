@@ -9,7 +9,7 @@ module.exports = {
       fontFamily: {
         inter: ['inter'],
         mulish: ['mulish'],
-        nunitoSans: ['nunito']
+        nunitoSans: ['Nunito Sans'],
       },
       backgroundImage: {
         'landing_bg' : "url('../assets/images/bg-login.png')",
