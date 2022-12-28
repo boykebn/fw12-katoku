@@ -7,6 +7,8 @@ import Image from 'next/image'
 import users from '../assets/images/users.png'
 import Link from 'next/link'
 
+import Modal from '../components/modal'
+
 const Confirmation = () => {
    return (
     <div className='font-Nunito-sans'>
@@ -68,7 +70,9 @@ const Confirmation = () => {
                                     </div>
 
                                     <div className='flex justify-end pt-10 pr-24'>
-                                        <button type="submit" className="btn w-[170px] h-[50px] bg-[#6379F4] rounded-lg text-white">Continue</button>
+                                        {/* <button type="submit" className="btn w-[170px] h-[50px] bg-[#6379F4] rounded-lg text-white">Continue</button> */}
+                                        <a href='#my-modal-2' className="btn">Continue</a>
+                                        <Modal onChangePin={console.log} />
                                     </div>
                                 </div>
                             </div>

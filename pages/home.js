@@ -1,4 +1,3 @@
-import React from 'react'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import Navbar from '../components/navbar'
@@ -8,30 +7,53 @@ import graphic from '../assets/images/graphic.png'
 import users from '../assets/images/users.png'
 import Link from 'next/link'
 
+import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+
+
 const Home = () => {
+
+    const token = useSelector((state)=> state.auth.token)
+    const [profil, setProfil] = useState({});
+    
+    useEffect(() =>{
+        getProfile()
+    },[])
+
+    const getProfile = async () => {
+        try{
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL}/profile`, {headers: {"authorization" : `Bearer ${token.token}`}});
+        setProfil(data.results)
+        }catch(err){
+        setProfil({});
+        }
+    }
+
+
   return (
     <div className='font-Nunito-sans'>
         <Header />
-        <main className='py-10 px-36 flex gap-5 bg-slate-50'>
+        <main className='py-10 px-36 flex gap-5'>
             <div className='flex-[0.2]'>
                 <Navbar />
             </div>
             <div className='flex flex-col flex-[0.8] gap-5'>
-                <div className='bg-[#6379F4] rounded-2xl p-8 flex text-white'>
+                <div className='bg-[#6379F4] rounded-xl p-8 flex text-white'>
                     <div className='flex flex-col flex-1'>
                         <div className='text-[#E0E0E0]'>Balance</div>
-                        <div className='flex-1 text-[40px] font-bold'>Rp120.000</div>
-                        <div className='text-[#E0E0E0]'>+62 813-9387-7946</div>
+                        <div className='flex-1 text-[40px] font-bold'>Rp {profil.balance}</div>
+                        <div className='text-[#E0E0E0]'>{profil.phoneNumber}</div>
                     </div>
                     <div className='flex flex-col gap-4'>
                         <div >
                             <button className='btn flex gap-4 py-4 px-8 border rounded-xl w-full'>
-                                <Icon.ArrowUp /><div> Transfer</div>
+                                <Icon.ArrowUp /><div>Transfer</div>
                             </button>
                         </div>
                         <div>
                             <button className='btn flex gap-4 py-4 px-8 border rounded-xl w-full'>
-                                <Icon.Plus /><div> Top Up</div>
+                                <Icon.Plus /><div>Top Up</div>
                             </button>
                         </div>
                     </div>

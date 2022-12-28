@@ -6,42 +6,72 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../redux/action/auth";
 import { useRouter } from 'next/router';
 
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import YupPassword from "yup-password";
+
+YupPassword(Yup);
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Required"),
+  password: Yup.string()
+    .password()
+    .min(6, "Min lenght 6")
+    .minLowercase(1, "Min lowercase 1")
+    .minUppercase(1, "Min uppercase 1")
+    .minNumbers(1, "Min numbers 1")
+    .minSymbols(1, "Min symbol 1")
+    .required("Required"),
+});
+
+
 
 
 const Login = () => {
-    // const [errMessage, setErrMessage] = React.useState("");
+    // // const [errMessage, setErrMessage] = React.useState("");
+    // const {error} = useSelector((state)=> state.auth)
+    // const dispatch = useDispatch();
+    // const router = useRouter();
+
+    // const login = async (e) => {
+    //     e.preventDefault();
+    //     const email = e.target.email.value;
+    //     const password = e.target.password.value;
+    //     const cb = () => {
+    //         router.push("/home");
+    //     };
+
+    //     try {
+    //         // const results = await dispatch(
+    //         //     loginAction({
+    //         //     email,
+    //         //     password,
+    //         //     cb,
+    //         //     })
+    //         // );
+    //        dispatch(
+    //             loginAction({
+    //             email,
+    //             password,
+    //             cb,
+    //             })
+    //         );
+    //         // setErrMessage(results.payload);
+    //     } catch (error) {
+    //         console.log(error);
+    //         }
+    //     };
+
     const {error} = useSelector((state)=> state.auth)
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const login = async (e) => {
-        e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        const cb = () => {
-            router.push("/home");
-        };
+    const handleSubmit = (value) => {
+        const email = value.email;
+        const password = value.password;
+        dispatch(loginAction({ email, password, cb: () => router("/") }));
+    };
 
-        try {
-            // const results = await dispatch(
-            //     loginAction({
-            //     email,
-            //     password,
-            //     cb,
-            //     })
-            // );
-           dispatch(
-                loginAction({
-                email,
-                password,
-                cb,
-                })
-            );
-            // setErrMessage(results.payload);
-        } catch (error) {
-            console.log(error);
-            }
-        };
 
     return (
         <div>
@@ -69,40 +99,56 @@ const Login = () => {
                         </div>
                     ) : null}
 
-                    <form onSubmit={login}>
-                        <div className="flex flex-col mb-7 pt-10">
-                            <div className=" bg-white flex">
-                                <div className='border-b-2 flex py-2 px-4 '>
-                                    <Icon.Mail />
-                                    <input className='pl-5 w-[450px]' type="email" name="email" placeholder="Enter your e-mail" />  
+
+                    <Formik initialValues={{
+                            email: "",
+                            password:""
+                        }}
+                        validationSchema={LoginSchema}
+                        onSubmit={handleSubmit}
+                        >
+                            {({errors, touched }) =>(
+                                <Form>
+                                <div className="flex flex-col mb-7 pt-10">
+                                    <div className=" bg-white flex">
+                                        <div className='border-b-2 flex py-2 px-4 '>
+                                            <Icon.Mail />
+                                            <Field className='pl-5 w-[450px]' type="email" name="email" placeholder="Enter your e-mail" />
+                                        </div>
+                                    </div>
+                                        {errors.email && touched.email ? (<div className="text-red-500">{errors.email}</div>) : null}
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col mb-5 pt-10">
-                            <div className=" bg-white flex">
-                                <div className='border-b-2 flex py-2 px-4 '>
-                                    <Icon.Lock />
-                                    <input className='pl-5 w-[450px]' type="password" name="password" placeholder="Enter your password" />  
+        
+                                <div className="flex flex-col mb-5 pt-10">
+                                    <div className=" bg-white flex">
+                                        <div className='border-b-2 flex py-2 px-4 '>
+                                            <Icon.Lock />
+                                            <Field className='pl-5 w-[450px]' type="password" name="password" placeholder="Enter your password" />
+                                        </div>
+                                    </div>
+                                        {errors.password && touched.password ? (<div className="text-red-500">{errors.password}</div>) : null}
                                 </div>
-                            </div>
-                        </div>
+        
+                                <div>
+                                    <Link href='/forgot-password'>
+                                        <p className='text-end text-sm text-[#3A3D42CC] pr-[52px]'>Forgot password?</p>
+                                    </Link>
+                                </div>
+        
+                                <div className='pt-20 flex justify-center pr-10'>
+                                    <button className="btn btn-wide text-center w-[510px] h-10 border rounded-md bg-[#6379F4]" type='submit'>Login</button>
+                                </div>
+        
+                                <div className='flex justify-center pt-10 pr-5'>
+                                    <p className='flex gap-1 text-[#3A3D42CC] text-sm'>Don’t have an account? Let’s </p>
+                                    <Link href='/sign-up'> <p className='text-[#6379F4]'>Sign Up</p></Link>
+                                </div>
+                            </Form>
+                            )}
 
-                        <div>
-                            <Link href='/'>
-                                <p className='text-end text-sm text-[#3A3D42CC] pr-[52px]'>Forgot password?</p>
-                            </Link>
-                        </div>
+                    </Formik>
 
-                        <div className='pt-20 flex justify-center pr-10'>
-                            <button className="btn btn-wide text-center w-[510px] h-10 border rounded-md bg-[#6379F4]" type='submit'>Login</button>
-                        </div>
-
-                        <div className='flex justify-center pt-10 pr-5'>
-                            <p className='flex gap-1 text-[#3A3D42CC] text-sm'>Don’t have an account? Let’s </p>
-                            <Link href='/'> <p className='text-[#6379F4]'>Sign Up</p></Link>
-                        </div>
-                    </form>
+                    
                 </div>
             </div>
         </div>

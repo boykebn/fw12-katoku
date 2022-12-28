@@ -6,12 +6,18 @@ import * as Icon from 'react-feather'
 import Image from 'next/image'
 import users from '../assets/images/users.png'
 import Link from 'next/link'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useRouter } from 'next/router'
+import  { logout as logoutAction }  from '../redux/reducer/auth'
+
+
 
 const Profile = () => {
     const token = useSelector((state)=> state.auth.token)
     const [profil, setProfil] = useState({});
+    const router = useRouter();
+    const dispatch = useDispatch();
     
     useEffect(() =>{
         getProfile()
@@ -26,7 +32,13 @@ const Profile = () => {
         }
     }
 
-    console.log(profil)
+    // console.log(profil)
+
+    const logout = (e) => {
+        // e.preventdefault()
+        dispatch(logoutAction())
+        router.push('/');
+    }
   
 
 
@@ -72,7 +84,7 @@ const Profile = () => {
 
                                     <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
                                         <div>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/'>
+                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/change-password'>
                                                 <p className='text-xl'>Change Password</p>
                                                 <Icon.ArrowRight className='' />
                                             </Link>
@@ -81,7 +93,7 @@ const Profile = () => {
 
                                     <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
                                         <div>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/'>
+                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/change-pin'>
                                                 <p className='text-xl'>Change Pin</p>
                                                 <Icon.ArrowRight className='' />
                                             </Link>
@@ -89,7 +101,7 @@ const Profile = () => {
                                     </div>
 
                                     <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
-                                        <div>
+                                        <div onClick={logout}>
                                             <Link className='flex items-center justify-between px-5 py-[15px]' href='/'>
                                                 <p className='text-xl'>Logout</p>
                                                 <Icon.ArrowRight className='' />
