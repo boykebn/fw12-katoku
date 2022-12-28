@@ -4,7 +4,32 @@ import Footer from '../components/footer'
 import Navbar from '../components/navbar'
 import * as Icon from 'react-feather'
 
+import { useSelector } from 'react-redux';
+import axios from 'axios'
+import { useRouter } from 'next/router';
+
 const UpdatePhoneNumber = () => {
+    const token = useSelector((state)=> state.auth.token)
+    const router = useRouter();
+
+    const postPhoneNumber = async (value)=>{
+        try{
+            await axios.post(`${process.env.NEXT_PUBLIC_URL}/profile/phone-number`, {phoneNumber: value}, {headers: {"authorization" : `Bearer ${token.token}`}})
+            router.push("/profile");
+        }catch(err){
+            console.log("masuk ke error")
+
+        }
+    }
+
+
+    const updatePhoneNumber = (e)=>{
+        e.preventDefault()
+        const phoneNumber = e.target.phoneNumber.value
+        postPhoneNumber(phoneNumber)
+    }
+
+
   return (
     <div className='font-nunitoSans'>
         <Header />
@@ -21,7 +46,7 @@ const UpdatePhoneNumber = () => {
                         </div>
                     </div>                        
                     <div className='flex-1 text-[#A9A9A9CC]'>
-                        <form className='flex flex-col gap-16 '>
+                        <form onSubmit={updatePhoneNumber} className='flex flex-col gap-16 '>
                             <div className='flex justify-center'>
                                 <div className='border-b-4 flex gap-5 pb-3 items-center w-1/2'>
                                     <Icon.Phone/>

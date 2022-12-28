@@ -7,7 +7,7 @@ import Image from 'next/image'
 import users from '../assets/images/users.png'
 import Link from 'next/link'
 
-const TransferSearchReceiver = () => {
+const InputAmount = () => {
    return (
     <div className='font-Nunito-sans'>
         <Header />
@@ -73,4 +73,4 @@ const TransferSearchReceiver = () => {
   )
 }
 
-export default TransferSearchReceiver
+export default InputAmount

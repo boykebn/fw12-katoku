@@ -1,28 +1,40 @@
 import React from 'react'
 import * as Icon from 'react-feather'
+import { useDispatch } from 'react-redux'
+import {logout} from '../redux/reducer/auth'
+import Link from 'next/link'
 
 const Navbar = () => {
+    const dispatch = useDispatch();
   return (
-    <nav className='bg-white py-11 flex flex-col font-Nunito-sans text-xl gap-14 h-full rounded-2xl'>
-        <div className='flex gap-5 px-8 text-[#6379F4] border-l-4 border-[#6379F4]'>
-            <Icon.Grid />
-            <div>Dasboard</div>
+    <nav className='bg-white py-11  flex flex-col font-Nunito-sans text-xl gap-14 h-full'>
+        <div className='hover:opacity-50'>
+            <Link className='flex gap-5 px-8 text-[#6379F4] border-l-4 border-[#6379F4]' href="/home">
+                <Icon.Grid />
+                <div>Dasboard</div>
+            </Link>
         </div>        
-        <div className='flex gap-5 px-8 '>
-            <Icon.ArrowUp />
-            <div>Transfer</div>
+        <div className='hover:opacity-50'>
+            <Link className='flex gap-5 px-8 ' href="/home">
+                <Icon.ArrowUp />
+                <div>Transfer</div>
+            </Link>
         </div>        
-        <div className='flex gap-5 px-8 '>
-            <Icon.Plus />
-            <div>Top Up</div>
+        <div className='hover:opacity-50'>
+            <Link className='flex gap-5 px-8 ' href="/home">
+                <Icon.Plus />
+                <div>Top Up</div>            
+            </Link> 
         </div>        
-        <div className='flex flex-1 gap-5 px-8 '>
-            <Icon.User />
-            <div>Profile</div>
+        <div className='flex-1 hover:opacity-50'>
+            <Link className='flex  gap-5 px-8 ' href="/profile">
+                <Icon.User />
+                <div>Profile</div>
+            </Link>  
         </div>        
-        <div className='flex gap-5 px-8 '>
+        <div className='flex gap-5 px-8 hover:opacity-50'>
             <Icon.LogOut />
-            <div>Logout</div>
+            <div onClick={()=>dispatch(logout())}>Logout</div>
         </div>   
     </nav>   
   )

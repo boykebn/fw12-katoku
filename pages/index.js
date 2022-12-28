@@ -14,12 +14,14 @@ import download from '../assets/images/download.png'
 import phone3 from '../assets/images/phone-3.png'
 import users from '../assets/images/users.png'
 
+import Header from '../components/header'
+
 const LandingPage = () => {
   return(
     <div>
       <div>
         <section className='bg-slate-50'>
-          <nav className="flex px-32 pt-14 items-center w-screen">
+          {/* <nav className="flex px-32 pt-14 items-center w-screen">
               <div className="text-xl font-Nunito-sans flex-1 text-[#6379F4] font-bold">KantongKu</div>
                 <div className="flex gap-5">
                   <div className=" ">
@@ -29,7 +31,8 @@ const LandingPage = () => {
                     <button className="btn bg-[#6379F4] border border-[#6379F4] rounded-md h-10 w-[100px] font-Nunito-sans text-white">Sign Up</button>
                   </div>
                 </div>
-            </nav>
+            </nav> */}
+            <Header></Header>
 
             <div className='grid grid-cols-[720px_minmax(720px,_1fr)] pb-20'>
                 <div className='pl-32'>
@@ -196,7 +199,7 @@ const LandingPage = () => {
                 <p className='text-[#EFEFEFE5]'>2020 FazzPay. All right reserved.</p>
                 <div className='flex gap-7 pr-32'>
                   <p className='text-[#EFEFEFE5]'>+62 813 8826 2406</p>
-                  <p className='text-[#EFEFEFE5]'>contact@katoku.com</p>
+                  <p className='text-[#EFEFEFE5]'>contact@barengan-ajah.com</p>
                 </div>
               </div>
           </footer>

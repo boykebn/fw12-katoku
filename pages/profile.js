@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/header'
 import Footer from '../components/footer'
 import Navbar from '../components/navbar'
@@ -6,8 +6,30 @@ import * as Icon from 'react-feather'
 import Image from 'next/image'
 import users from '../assets/images/users.png'
 import Link from 'next/link'
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const Profile = () => {
+    const token = useSelector((state)=> state.auth.token)
+    const [profil, setProfil] = useState({});
+    
+    useEffect(() =>{
+        getProfile()
+    },[])
+
+    const getProfile = async () => {
+        try{
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL}/profile`, {headers: {"authorization" : `Bearer ${token.token}`}});
+        setProfil(data.results)
+        }catch(err){
+        setProfil({});
+        }
+    }
+
+    console.log(profil)
+  
+
+
   return (
     <div className='font-Nunito-sans'>
         <Header />
@@ -33,15 +55,15 @@ const Profile = () => {
 
                                 <div className='flex justify-center pt-5'>
                                     <div className='flex flex-col items-center'>
-                                        <p className='text-xl font-semibold'>Sueb bin Beus</p>
-                                        <p className='text-[#7A7886] text-xs pt-3'>+62 813-9387-7946</p>
+                                        <p className='text-xl font-semibold'>{profil.firstName} {profil.lastName}</p>
+                                        <p className='text-[#7A7886] text-xs pt-3'>{profil.phoneNumber}</p>
                                     </div>
                                 </div>
 
                                 <div className='flex flex-col gap-6 items-center pt-10 pb-10'>
                                     <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
                                         <div>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/'>
+                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/personal-info'>
                                                 <p className='text-xl'>Personal Information</p>
                                                 <Icon.ArrowRight className='' />
                                             </Link>
