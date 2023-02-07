@@ -8,7 +8,7 @@ import {
 } from "react-feather";
 import Image from "next/image";
 
-import user from "../assets/Images/dummyAvatar.jpg";
+import user from "../assets/images/dummyAvatar.jpg";
 import http from "../helpers/http";
 
 const NavbarHidden = () => {
