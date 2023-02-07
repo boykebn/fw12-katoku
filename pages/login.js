@@ -24,53 +24,23 @@ const LoginSchema = Yup.object().shape({
     .required("Required"),
 });
 
-
-
-
 const Login = () => {
-    // // const [errMessage, setErrMessage] = React.useState("");
     // const {error} = useSelector((state)=> state.auth)
-    // const dispatch = useDispatch();
-    // const router = useRouter();
-
-    // const login = async (e) => {
-    //     e.preventDefault();
-    //     const email = e.target.email.value;
-    //     const password = e.target.password.value;
-    //     const cb = () => {
-    //         router.push("/home");
-    //     };
-
-    //     try {
-    //         // const results = await dispatch(
-    //         //     loginAction({
-    //         //     email,
-    //         //     password,
-    //         //     cb,
-    //         //     })
-    //         // );
-    //        dispatch(
-    //             loginAction({
-    //             email,
-    //             password,
-    //             cb,
-    //             })
-    //         );
-    //         // setErrMessage(results.payload);
-    //     } catch (error) {
-    //         console.log(error);
-    //         }
-    //     };
-
-    const {error} = useSelector((state)=> state.auth)
     const dispatch = useDispatch();
+    const token = useSelector((state) => state.auth)
     const router = useRouter();
 
     const handleSubmit = (value) => {
         const email = value.email;
         const password = value.password;
-        dispatch(loginAction({ email, password, cb: () => router("/") }));
+        dispatch(loginAction({ email, password, cb: () => router.push("/home") }));
     };
+
+    // React.useEffect (() => {
+    //   if(token) {
+    //     router.replace('/home')
+    //   }
+    // },[token])
 
 
     return (
@@ -90,14 +60,14 @@ const Login = () => {
                         <p className='text-[#3A3D4299] text-lg leading-8'>Transfering money is eassier than ever, you can access KantongKu wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
                     </div>
 
-                    {error? (
+                    {/* {error? (
                         <div className="alert alert-error shadow-lg">
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 <span>{error}</span>
                             </div>
                         </div>
-                    ) : null}
+                    ) : null} */}
 
 
                     <Formik initialValues={{
@@ -114,9 +84,9 @@ const Login = () => {
                                         <div className='border-b-2 flex py-2 px-4 '>
                                             <Icon.Mail />
                                             <Field className='pl-5 w-[450px]' type="email" name="email" placeholder="Enter your e-mail" />
+                                            {errors.email && touched.email ? (<div className="text-red-500">{errors.email}</div>) : null}
                                         </div>
                                     </div>
-                                        {errors.email && touched.email ? (<div className="text-red-500">{errors.email}</div>) : null}
                                 </div>
         
                                 <div className="flex flex-col mb-5 pt-10">
@@ -124,9 +94,9 @@ const Login = () => {
                                         <div className='border-b-2 flex py-2 px-4 '>
                                             <Icon.Lock />
                                             <Field className='pl-5 w-[450px]' type="password" name="password" placeholder="Enter your password" />
+                                            {errors.password && touched.password ? (<div className="text-red-500">{errors.password}</div>) : null}
                                         </div>
                                     </div>
-                                        {errors.password && touched.password ? (<div className="text-red-500">{errors.password}</div>) : null}
                                 </div>
         
                                 <div>
@@ -136,17 +106,19 @@ const Login = () => {
                                 </div>
         
                                 <div className='pt-20 flex justify-center pr-10'>
-                                    <button className="btn btn-wide text-center w-[510px] h-10 border rounded-md bg-[#6379F4]" type='submit'>Login</button>
+                                    <button className="btn btn-wide text-center w-[510px] h-10 border rounded-md bg-[#9ED5C5]" type='submit'>Login</button>
                                 </div>
         
-                                <div className='flex justify-center pt-10 pr-5'>
-                                    <p className='flex gap-1 text-[#3A3D42CC] text-sm'>Don’t have an account? Let’s </p>
-                                    <Link href='/sign-up'> <p className='text-[#6379F4]'>Sign Up</p></Link>
-                                </div>
                             </Form>
                             )}
 
                     </Formik>
+                                <div className='flex justify-center pt-10 pr-5'>
+                                    <p className='flex gap-1 text-[#3A3D42CC] text-sm'>Don’t have an account? Let’s {" "}</p>
+                                    <Link href='/sign-up'>
+                                      <p className='text-[#8EC3B0] pl-1 text-sm'>Sign Up</p>
+                                    </Link>
+                                </div>
 
                     
                 </div>

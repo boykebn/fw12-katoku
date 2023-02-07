@@ -1,124 +1,250 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Navbar from '../components/navbar'
-import * as Icon from 'react-feather'
-import Image from 'next/image'
-import users from '../assets/images/users.png'
-import Link from 'next/link'
-import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { useRouter } from 'next/router'
-import  { logout as logoutAction }  from '../redux/reducer/auth'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Grid,
+  ArrowUp,
+  Plus,
+  User,
+  LogOut,
+  ArrowRight,
+  Edit2,
+} from "react-feather";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
-
+import { logout } from "../redux/reducer/auth";
+import user from "../assets/Images/dummyAvatar.jpg";
+import Navbar from "../components/Navbar";
+import withAuth from "../components/hoc/withAuth";
+import ModalTopUp from "../components/ModalTopUp";
+import http from "../helpers/http";
+import Footer from "../components/Footer";
 
 const Profile = () => {
-    const token = useSelector((state)=> state.auth.token)
-    const [profil, setProfil] = useState({});
-    const router = useRouter();
-    const dispatch = useDispatch();
-    
-    useEffect(() =>{
-        getProfile()
-    },[])
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/login");
+  };
 
-    const getProfile = async () => {
-        try{
-        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_URL}/profile`, {headers: {"authorization" : `Bearer ${token.token}`}});
-        setProfil(data.results)
-        }catch(err){
-        setProfil({});
-        }
+  //get profile
+  const [profile, setProfile] = useState({});
+  const token = useSelector((state) => state.auth.token);
+  const decode = jwt_decode(token);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await http().get("/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProfile(response.data.results);
+    } catch (error) {
+      if (error) throw error;
     }
+  };
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
-    // console.log(profil)
-
-    const logout = (e) => {
-        // e.preventdefault()
-        dispatch(logoutAction())
-        router.push('/');
+  const [disabled, setDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [errorLimit, setErrorLimit] = useState(false);
+  const uploadPicture = async (e) => {
+    e.preventDefault();
+    setLoading("Loading...");
+    const file = e.target.picture.files[0];
+    console.log(file);
+    try {
+      if (file.size <= 20000) {
+        const formData = new FormData();
+        formData.append("picture", file);
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_URL}/profile`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setLoading(false);
+        setSuccess("Update Photo Success");
+        setTimeout(() => {
+          setSuccess(false);
+          fetchProfile();
+        }, 3000);
+      } else {
+        setLoading(false);
+        setErrorLimit("Please upload file less than 2 MB");
+        setTimeout(() => {
+          setErrorLimit(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  
+  };
 
+  // for top up handle
+  const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className='font-Nunito-sans'>
-        <Header />
-        <main className='py-10 px-36 flex gap-5 bg-slate-50'>
-            <div className='flex-[0.2]'>
-                <Navbar />
-            </div>
-            <div className='flex flex-col flex-[0.8] gap-5'>
-                <div className='flex gap-5'>
-                    <div className='bg-white flex flex-col flex-[1] h-full px-10 py-8 rounded-xl gap-10'>
-                        <div>
-                            <div className='pt-10'>
-                                <div className='flex justify-center'>
-                                    <Image src={users} alt="" />
-                                </div>
-
-                                <div>
-                                    <Link className='flex justify-center items-center gap-2 pt-5 text-[#7A7886]' href='/'>
-                                        <Icon.Edit2 className='w-[12px] h-[12px]'/>
-                                        <p className='text-xs'>Edit</p> 
-                                    </Link>
-                                </div>
-
-                                <div className='flex justify-center pt-5'>
-                                    <div className='flex flex-col items-center'>
-                                        <p className='text-xl font-semibold'>{profil.firstName} {profil.lastName}</p>
-                                        <p className='text-[#7A7886] text-xs pt-3'>{profil.phoneNumber}</p>
-                                    </div>
-                                </div>
-
-                                <div className='flex flex-col gap-6 items-center pt-10 pb-10'>
-                                    <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
-                                        <div>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/personal-info'>
-                                                <p className='text-xl'>Personal Information</p>
-                                                <Icon.ArrowRight className='' />
-                                            </Link>
-                                        </div>
-                                    </div>
-
-                                    <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
-                                        <div>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/change-password'>
-                                                <p className='text-xl'>Change Password</p>
-                                                <Icon.ArrowRight className='' />
-                                            </Link>
-                                        </div>
-                                    </div>
-
-                                    <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
-                                        <div>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/change-pin'>
-                                                <p className='text-xl'>Change Pin</p>
-                                                <Icon.ArrowRight className='' />
-                                            </Link>
-                                        </div>
-                                    </div>
-
-                                    <div className='w-[433px] h-[60px] border rounded-xl bg-[#E5E8ED]'>
-                                        <div onClick={logout}>
-                                            <Link className='flex items-center justify-between px-5 py-[15px]' href='/'>
-                                                <p className='text-xl'>Logout</p>
-                                                <Icon.ArrowRight className='' />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                        
-                        
-                    </div>                    
+    <>
+      <Navbar />
+      <section className="bg-[#FAFCFF] px-16 py-8 flex">
+        <div className="w-1/4 bg-white flex justify-between h-screen flex-col py-9 rounded-3xl mr-4">
+          <div>
+            <Link href="/home" className="flex w-full">
+              <div className="px-6 flex mb-16">
+                <Grid className="mr-6" />
+                <div className="text-lg font-bold text-[#3A3D42CC]">
+                  Dashboard
                 </div>
+              </div>
+            </Link>
+            <div>
+              <Link href="/transfer-search-receiver-receiver" className="px-6 flex mb-16">
+                <ArrowUp className="mr-6" />
+                <div className="text-lg font-bold	text-[#3A3D42CC]">
+                  Transfer
+                </div>
+              </Link>
             </div>
-        </main>
-        <Footer />
-    </div>
-  )
-}
+            <div>
+              <div className="px-6 flex mb-16 hover:border-l-4 hover:border-[#9ED5C5] hover:text-[#9ED5C5] focus:text-[#9ED5C5]">
+                <Plus className="mr-6 "/>
+                <button onClick={() => setShowModal(true)} className="text-lg font-bold	">Top Up</button>
+              </div>
+            </div>
+            <div>
+              <Link
+                href="/profile"
+                className="px-6 flex mb-16 border-l-4 focus:outline-none border-[#9ED5C5]"
+              >
+                <User className="mr-6" style={{ color: "#9ED5C5" }} />
+                <div className="text-lg font-bold text-[#9ED5C5]">Profile</div>
+              </Link>
+            </div>
+          </div>
+          <div>
+            <button onClick={handleLogout} className="flex px-6">
+              <LogOut className="mr-6" />
+              <div className="text-lg font-bold	text-[#3A3D42CC]">Logout</div>
+            </button>
+          </div>
+        </div>
+        <div className="w-3/4 bg-white h-screen rounded-3xl py-10">
+          <div className="flex flex-col items-center">
+            {profile?.picture ? (
+              <Image
+                className="w-[100px] h-[100px] rounded-lg"
+                width={50}
+                height={50}
+                src={
+                  `${process.env.NEXT_PUBLIC_URL}/upload/` + profile?.picture
+                }
+                alt="profile"
+              />
+            ) : (
+              <Image
+                className="w-[100px] h-[100px] rounded-lg"
+                src={user}
+                alt="profile"
+              />
+            )}
+            <form
+              onSubmit={uploadPicture}
+              encType="multipart/form-data"
+              className="flex flex-col"
+            >
+              <input
+                type="file"
+                name="picture"
+                onChange={() => setDisabled(false)}
+                accept="image/png, image/jpeg, image/jpg"
+              ></input>
+              <button
+                disabled={disabled}
+                type="submit"
+                className="relative mt-3 mb-5 btn bg-[#9ED5C5]"
+              >
+                <Edit2 className="absolute w-6 text-white top-2.5 left-12" />
+                <div className="text-white text-base">Upload Image</div>
+              </button>
+              {loading && (
+                <div className="text-lg font-bold text-center text-blue-400">
+                  {loading}
+                </div>
+              )}
+              {success && (
+                <div className="text-lg font-bold text-center text-green-400">
+                  {success}
+                </div>
+              )}
+              {errorLimit && (
+                <div className="text-lg font-bold text-center text-red-400">
+                  {errorLimit}
+                </div>
+              )}
+            </form>
+            <div className="text-[#4D4B57] font-bold">
+              {profile?.firstName} {profile?.lastName}
+            </div>
+            {profile?.phoneNumber ? (
+              <div className="text-[#7A7886] text-base mt-3 mb-10">
+                {profile?.phoneNumber}
+              </div>
+            ) : (
+              <Link href="/edit-phoneNumber" className="mt-3 mb-10">
+                Add Phone Number
+              </Link>
+            )}
+            <Link
+              href="/personal-info"
+              className="bg-[#E5E8ED] hover:bg-[#9ED5C5] rounded-lg flex items-center justify-center w-1/2 px-5 py-3 mb-5"
+            >
+              <div className="text-[#4D4B57] font-bold flex-1">
+                Personal Information
+              </div>
+              <ArrowRight style={{ color: "#7E7D84" }} />
+            </Link>
+            <Link
+              href="/change-password"
+              className="bg-[#E5E8ED] hover:bg-[#9ED5C5] rounded-lg flex items-center justify-center w-1/2 px-5 py-3 mb-5"
+            >
+              <div className="text-[#4D4B57] font-bold flex-1">
+                Change Password
+              </div>
+              <ArrowRight style={{ color: "#7E7D84" }} />
+            </Link>
+            <Link
+              href="/change-pin"
+              className="bg-[#E5E8ED] hover:bg-[#9ED5C5] rounded-lg flex items-center justify-center w-1/2 px-5 py-3 mb-5"
+            >
+              <div className="text-[#4D4B57] font-bold flex-1">Change PIN</div>
+              <ArrowRight style={{ color: "#7E7D84" }} />
+            </Link>
+            <div className="bg-[#E5E8ED] hover:bg-[#9ED5C5] rounded-lg flex items-center justify-center w-1/2 px-5 py-3 mb-5">
+              <div className="text-[#4D4B57] font-bold flex-1">Logout</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-export default Profile
+      <footer>
+        <Footer />  
+      </footer>
+      <ModalTopUp isVisible={showModal} onClose={() => setShowModal(false)} />
+    </>
+  );
+};
+
+export default withAuth(Profile);

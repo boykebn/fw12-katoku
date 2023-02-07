@@ -71,7 +71,7 @@ const CreatePin = () => {
             console.log(createPin)
         //     if((id) && (createPin)){
         //         console.log("masuk if post pin")
-                await axios.post( `${process.env.NEXT_PUBLIC_URL}/auth/set-pin`, {userId: id, pin: createPin}, {headers: {"authorization" : `Bearer ${token.token}`}})
+                await http().post('/auth/set-pin', {userId: id, pin: createPin}, {headers: {"authorization" : `Bearer ${token}`}})
                 router.push("/home");
         //     }
         //     else{

@@ -153,12 +153,12 @@ const SignUp = () => {
                             </div>
     
                             <div className='pt-5 flex justify-center pr-10'>
-                                <button className="btn btn-wide text-center w-[510px] h-10 border rounded-md bg-[#6379F4]" type='submit'>SignUp</button>
+                                <button className="btn btn-wide text-center w-[510px] h-10 border rounded-md bg-[#9ED5C5]" type='submit'>SignUp</button>
                             </div>
     
                             <div className='flex justify-center pt-5 pr-5'>
                                 <p className='flex text-[#3A3D42CC] text-sm'>Already have an account? Let’s</p>
-                                <Link href='/login'> <p className='text-[#6379F4] pl-1'>Login</p></Link>
+                                <Link href='/login'> <p className='text-[#8EC3B0] pl-1 text-sm'>Login</p></Link>
                             </div>
                         </Form>
                         )}

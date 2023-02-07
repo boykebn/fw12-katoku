@@ -1,23 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   ArrowUp,
   Bell,
   ArrowDown,
 } from "react-feather";
 import Image from "next/image";
-import Link from "next/link";
 
 import user from "../assets/Images/dummyAvatar.jpg";
-import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
 
-const Navbar = () => {
-  const dispatch = useDispatch();
+const NavbarHidden = () => {
   const [profile, setProfile] = useState({});
   const token = useSelector((state) => state.auth.token);
-
+  //get profile
   const fetchProfile = async () => {
     try {
       const response = await http().get("/profile", {
@@ -58,55 +55,36 @@ const Navbar = () => {
 
   return (
     <>
-      <nav>
-        <div className="md:justify-center md:px-16 px-3 py-8 flex items-center justify-start rounded-b-2xl md:bg-white bg-[#FAFCFF]">
-          <div className="flex-1 text-[#9ED5C5] text-3xl font-bold md:block hidden">
-            KantongKu
-          </div>
-          <div className="flex gap-5 items-center w-full group relative md:w-auto">
-            <div className="flex gap-3 flex-1">
-              {profile?.picture ? (
-                <Image
-                  className="w-[50px] h-[50px] rounded-lg"
-                  width={50}
-                  height={50}
-                  src={
-                    `${process.env.NEXT_PUBLIC_URL}/upload/` + profile?.picture
-                  }
-                  alt="profile"
-                />
-              ) : (
-                <Image
-                  className="w-[50px] h-[50px] rounded-lg"
-                  width={50}
-                  height={50}
-                  src={user}
-                  alt="profile"
-                />
-              )}
-              <span className="bottom-0 left-0 absolute w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full" />
-              <div className="hidden group-hover:block absolute right-25 top-[50px] border-2 rounded border-[#dedede] bg-[#FEFCF3] py-2 pl-4 pr-8">
-                <div className="hover:bg-gray-200 rounded w-[60px] text-center">
-                  <Link href="/profile">Profile</Link>
-                </div>
-
-                <div className="hover:bg-gray-200 rounded w-[60px] text-center">
-                  <button type="button" onClick={() => dispatch(logout())}>
-                    Logout
-                  </button>
-                </div>
+      <nav className="hidden md:block">
+        <div className="px-16 py-8 flex items-center justify-center rounded-b-2xl">
+          <div className="flex-1 text-[#9ED5C5] text-3xl font-bold">KantongKu</div>
+          <div className="flex gap-5 justify-center items-center">
+            {profile?.picture ? (
+              <Image
+                className="w-[50px] h-[50px] rounded-lg"
+                width={50}
+                height={50}
+                src={
+                  `${process.env.NEXT_PUBLIC_URL}/upload/` + profile?.picture
+                }
+                alt="profile"
+              />
+            ) : (
+              <Image
+                className="w-[50px] h-[50px] rounded-lg"
+                width={50}
+                height={50}
+                src={user}
+                alt="profile"
+              />
+            )}
+            <div>
+              <div className="text-[#3A3D42] text-lg font-bold">
+                {profile?.firstName} {profile?.lastName}
               </div>
-              <div>
-                <div className="text-sm block md:hidden">Hello,</div>
-                <div className="text-[#3A3D42] text-lg font-bold">
-                  {profile?.firstName} {profile?.lastName}
-                </div>
-                  <div className="text-sm hidden md:block">
-                    {profile?.phoneNumber}
-                  </div>
-              </div>
+              
+                <div className="text-sm">{profile?.phoneNumber}</div>
             </div>
-
             <div className="dropdown dropdown-end">
               <div tabIndex={0} className="btn btn-ghost rounded-btn">
                 <Bell />
@@ -147,4 +125,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarHidden;

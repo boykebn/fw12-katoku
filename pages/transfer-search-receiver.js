@@ -1,88 +1,260 @@
-import React from 'react'
-import Header from '../components/header'
-import Footer from '../components/footer'
-import Navbar from '../components/navbar'
-import * as Icon from 'react-feather'
-import Image from 'next/image'
-import users from '../assets/images/users.png'
-import Link from 'next/link'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Grid,
+  ArrowUp,
+  Plus,
+  User,
+  LogOut,
+  Search,
+  ArrowLeft,
+  ArrowRight,
+} from "react-feather";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { logout } from "../redux/reducer/auth";
+import http from "../helpers/http";
+import NavbarHidden from "../components/NavbarHidden";
+import ModalTopUp from "../components/ModalTopUp";
+import withAuth from "../components/hoc/withAuth";
+import profile1 from "../assets/Images/user1.png";
+import profile2 from "../assets/Images/user2.png";
+import profile3 from "../assets/Images/user3.png";
+import profileUser from "../assets/Images/dummyAvatar.jpg";
+import Footer from "../components/Footer";
+
 
 const TransferSearchReceiver = () => {
-   return (
-    <div className='font-Nunito-sans'>
-        <Header />
-        <main className='py-10 px-36 flex gap-5 bg-slate-50'>
-            <div className='flex-[0.2]'>
-                <Navbar />
-            </div>
-            <div className='flex flex-col flex-[0.8] gap-5'>
-                <div className='flex gap-5'>
-                    <div className='bg-white flex flex-col flex-[1] h-full px-10 py-8 rounded-xl gap-10'>
-                        <div>
-                            <div className='pt-3'>
-                                <div className='pb-5'>
-                                    <p className='text-2xl font-semibold text-[#3A3D42]'>Search Receiver</p>
-                                </div>
-                                
-                                <form>
-                                    <div className='w-[790px] h-[54px] flex items-center gap-5'>
-                                        <div className='w-[20px]'>
-                                            <Icon.Search className='' />
-                                        </div>
-                                        <input className='w-[790px] h-[54px] bg-[#3A3D421A] rounded-xl pl-5' type="text" placeholder="Search receiver here..."></input>
-                                    </div>
-                                </form>
-                                <div className='flex flex-col gap-6 pt-10 pb-10'>
-                                    <div className='w-[790px] h-[110px] rounded-xl bg-white shadow-md flex'>
-                                        <div className='flex pl-5 items-center'>
-                                            <Image className='w-[70px] h-[70px]' src={users} alt="users" />
-                                        </div>
-                                        <div className='px-5 py-7'>
-                                            <p className='text-xl text-[#514F5B] font-semibold'>Sueb</p>
-                                            <p className='text-md text-[#7A7886] pt-1'>+62 813-8492-9994</p>
-                                        </div>
-                                    </div>
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/login");
+  };
+  const [page, setPage] = useState(1);
+  //get all transaction
+  const token = useSelector((state) => state.auth.token);
+  const [transaction, setTransaction] = useState([]);
+  const fetchTransaction = async () => {
+    try {
+      const res = await http().get(
+        `/transactions/recipient?page=${page}&limit=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setTransaction(res.data.results);
+    } catch (error) {
+      if (error) throw error;
+    }
+  };
+  useEffect(() => {
+    fetchTransaction();
+  }, [page]);
 
-                                    <div className='w-[790px] h-[110px] rounded-xl bg-white shadow-md flex'>
-                                        <div className='flex pl-5 items-center'>
-                                            <Image className='w-[70px] h-[70px]' src={users} alt="users" />
-                                        </div>
-                                        <div className='px-5 py-7'>
-                                            <p className='text-xl text-[#514F5B] font-semibold'>Sueb</p>
-                                            <p className='text-md text-[#7A7886] pt-1'>+62 813-8492-9994</p>
-                                        </div>
-                                    </div>
+  // //Handle page
+  const handlePrev = () => {
+    setPage(page - 1);
+  };
+  const handleNext = () => {
+    setPage(page + 1);
+  };
 
-                                    <div className='w-[790px] h-[110px] rounded-xl bg-white shadow-md flex'>
-                                        <div className='flex pl-5 items-center'>
-                                            <Image className='w-[70px] h-[70px]' src={users} alt="users" />
-                                        </div>
-                                        <div className='px-5 py-7'>
-                                            <p className='text-xl text-[#514F5B] font-semibold'>Sueb</p>
-                                            <p className='text-md text-[#7A7886] pt-1'>+62 813-8492-9994</p>
-                                        </div>
-                                    </div>
+  // for top up handle
+  const [showModal, setShowModal] = useState(false);
 
-                                    <div className='w-[790px] h-[110px] rounded-xl bg-white shadow-md flex'>
-                                        <div className='flex pl-5 items-center'>
-                                            <Image className='w-[70px] h-[70px]' src={users} alt="users" />
-                                        </div>
-                                        <div className='px-5 py-7'>
-                                            <p className='text-xl text-[#514F5B] font-semibold'>Sueb</p>
-                                            <p className='text-md text-[#7A7886] pt-1'>+62 813-8492-9994</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                        
-                        
-                    </div>                    
+  return (
+    <>
+      <NavbarHidden />
+      <section className="bg-[#FAFCFF] lg:px-16 md:px-5 px-3 py-8 flex">
+        <div className="w-1/4 bg-white justify-between h-screen flex-col py-9 rounded-3xl mr-4 hidden md:flex">
+          <div>
+            <Link href="/home" className="flex w-full">
+              <div className="px-6 flex mb-16">
+                <Grid className="mr-6" />
+                <div className="text-lg font-bold text-[#3A3D42CC]">
+                  Dashboard
                 </div>
+              </div>
+            </Link>
+            <div>
+              <Link
+                href="/transfer-search-receiver-receiver"
+                className="px-6 flex mb-16 border-l-4 focus:outline-none border-[#9ED5C5]"
+              >
+                <ArrowUp className="mr-6" style={{ color: "#9ED5C5" }} />
+                <div className="text-lg font-bold	text-[#9ED5C5]">Transfer</div>
+              </Link>
             </div>
-        </main>
-        <Footer />
-    </div>
-  )
-}
+            <div>
+              <div className="px-6 flex mb-16">
+                <Plus className="mr-6" />
+                <button onClick={() => setShowModal(true)} className="text-lg font-bold	text-[#3A3D42CC]">Top Up</button>
+              </div>
+            </div>
+            <div>
+              <Link href="/profile" className="px-6 flex mb-16">
+                <User className="mr-6" />
+                <div className="text-lg font-bold	text-[#3A3D42CC]">Profile</div>
+              </Link>
+            </div>
+          </div>
+          <div>
+            <button onClick={handleLogout} className="flex px-6">
+              <LogOut className="mr-6" />
+              <div className="text-lg font-bold	text-[#3A3D42CC]">Logout</div>
+            </button>
+          </div>
+        </div>
+        <div className="w-full md:w-3/4 bg-[#FAFCFF] md:bg-white h-screen rounded-3xl p-6 overflow-y-scroll">
+          <Link
+            href="/home"
+            className="items-center mb-12 flex md:hidden relative"
+          >
+            <ArrowLeft className="mr-5 text-[#4D4B57]" />
+            <div className="flex-1 text-[#3A3D42] font-bold text-lg">
+              Find Receiver
+            </div>
+          </Link>
+          <div className="items-center mb-5 hidden md:flex">
+            <div className="flex-1 text-[#3A3D42] font-bold text-lg">
+              Search Receiver
+            </div>
+          </div>
+          <div className="relative mb-8">
+            <input
+              type="text"
+              placeholder="Search receiver here"
+              className="w-full relative px-14 py-3 bg-[#3A3D421A] rounded-lg"
+            ></input>
+            <Search
+              className="absolute top-[27%] left-[2.5%]"
+              style={{ color: "#A9A9A9" }}
+            />
+          </div>
+          <div className="block md:hidden text-[#514F5B] text-lg font-bold mb-3">
+            Quick Access
+          </div>
+          <div className="gap-3 flex md:hidden">
+            <Link
+              href="/transfer-input"
+              className="flex mb-8 shadow-md rounded-lg p-3 w-1/3 items-center justify-center flex-col bg-white"
+            >
+              <Image width={56} height={56} src={profile3} alt="profile" />
+              <div className="flex flex-col justify-center">
+                <div className="text-[#4D4B57] text-base font-bold">Michi</div>
+                <div className="text-[#7A7886] text-sm">-9994</div>
+              </div>
+            </Link>
+            <Link
+              href="/transfer-input"
+              className="flex mb-8 shadow-md rounded-lg p-3 w-1/3 items-center justify-center flex-col bg-white"
+            >
+              <Image width={56} height={56} src={profile2} alt="profile" />
+              <div className="flex flex-col justify-center">
+                <div className="text-[#4D4B57] text-base font-bold">Dody</div>
+                <div className="text-[#7A7886] text-sm">-3561</div>
+              </div>
+            </Link>
+            <Link
+              href="/transfer-input"
+              className="flex mb-8 shadow-md rounded-lg p-3 w-1/3 items-center justify-center flex-col bg-white"
+            >
+              <Image width={56} height={56} src={profile1} alt="profile" />
+              <div className="flex flex-col justify-center">
+                <div className="text-[#4D4B57] text-base font-bold">Rian</div>
+                <div className="text-[#7A7886] text-sm">-3822</div>
+              </div>
+            </Link>
+          </div>
+          <div className="block md:hidden text-[#514F5B] text-lg font-bold mb-3">
+            All Contacts{" "}
+          </div>
+          <div className="text-[#8F8F8F] text-sm	block md:hidden mb-3">
+            17 Contact Founds
+          </div>
+          {transaction?.map((user) => (
+            <Link
+              key={user.id}
+              href={"/transfer/" + user.id}
+              className="flex mb-8 shadow-md p-3 bg-white rounded-lg"
+            >
+              <div className="flex-1">
+                <div className="flex gap-3">
+                  {user?.picture ? (
+                    <Image
+                      width={56}
+                      height={56}
+                      src={
+                        `${process.env.NEXT_PUBLIC_URL}/upload/` + user?.picture
+                      }
+                      alt="profile"
+                    />
+                  ) : (
+                    <Image
+                      width={56}
+                      height={56}
+                      src={profileUser}
+                      alt="profile"
+                    />
+                  )}
+                  <div className="flex flex-col justify-center">
+                    <div className="text-[#4D4B57] text-base font-bold">
+                      {user?.firstName} {user?.lastName}
+                    </div>
+                    <div className="text-[#7A7886] text-sm">
+                      {user?.phoneNumber}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+          <div className="flex justify-center items-center">
+            <div className="flex gap-5">
+              {page > 1 ? (
+                <button
+                  onClick={handlePrev}
+                  className="btn bg-[#9ED5C5] flex gap-3 py-2 px-4 rounded-lg bg-red shadow-lg justify-center items-center"
+                >
+                  <ArrowLeft className="text-white" />
+                  <div className="text-lg font-bold">Prev</div>
+                </button>
+              ) : (
+                <button
+                  onClick={handlePrev}
+                  disabled={true}
+                  className="btn flex gap-3 py-2 px-4 rounded-lg bg-red shadow-lg justify-center items-center"
+                >
+                  <ArrowLeft className="text-white" />
+                  <div className="text-lg font-bold">Prev</div>
+                </button>
+              )}
+              <button
+                onClick={handleNext}
+                disabled={transaction.length < 5}
+                className="btn bg-[#9ED5C5] flex gap-3 py-2 px-4 rounded-lg bg-red shadow-lg justify-center items-center"
+              >
+                <div className="text-lg font-bold">Next</div>
+                <ArrowRight className="text-white" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
-export default TransferSearchReceiver
+      <footer className="md:block hidden">
+        <Footer />
+      </footer>
+      <ModalTopUp isVisible={showModal} onClose={() => setShowModal(false)} />
+    </>
+  );
+};
+
+export default withAuth(TransferSearchReceiver);
+// export default TransferSearchReceiver;
