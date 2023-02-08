@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import user from "../assets/Images/dummyAvatar.jpg";
+import user from "../assets/images/dummyAvatar.jpg";
 import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
 

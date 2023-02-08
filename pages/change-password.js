@@ -15,8 +15,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 import { logout } from "../redux/reducer/auth";
-import ModalTopUp from "../components/ModalTopUp";
-import Navbar from "../components/Navbar";
+import ModalTopUp from "../omponents/ModalTopUp";
+import Navbar from "../Components/Navbar";
 import withAuth from "../components/hoc/withAuth";
 import Footer from "../components/Footer";
 
