@@ -17,8 +17,8 @@ import { useRouter } from "next/router";
 
 import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
-import NavbarHidden from "../components/navbarHidden";
-import ModalTopUp from "../components/modalTopUp";
+import NavbarHidden from "../components/NavbarHidden";
+import ModalTopUp from "../components/ModalTopUp";
 import withAuth from "../components/hoc/withAuth";
 import profile1 from "../assets/images/user1.png";
 import profile2 from "../assets/images/user2.png";

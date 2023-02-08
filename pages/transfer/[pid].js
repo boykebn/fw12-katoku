@@ -19,10 +19,10 @@ import { transferInput } from "../../redux/reducer/transfer";
 import http from "../../helpers/http";
 import NavbarHidden from "../../components/NavbarHidden";
 import ModalTopUp from "../../components/ModalTopUp";
-import Modal from "../../components/Modal";
+import Modal from "../../components/modal";
 import withAuth from "../../components/hoc/withAuth";
-import profileUser from "../../assets/Images/dummyAvatar.jpg";
-import Footer from "../../components/Footer";
+import profileUser from "../../assets/images/dummyAvatar.jpg";
+import Footer from "../../components/footer";
 
 const Transfer_Input = () => {
   const dispatch = useDispatch();
