@@ -15,7 +15,7 @@ import { logout } from "../redux/reducer/auth";
 import ModalTopUp from "../components/ModalTopUp";
 import Navbar from "../components/navbar";
 import withAuth from "../components/hoc/withAuth";
-import Footer from "../Components/footer";
+import Footer from "../components/footer";
 
 const Change_Pin = () => {
   const [newPin, setNewPin] = useState([]);

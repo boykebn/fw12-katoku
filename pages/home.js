@@ -17,9 +17,9 @@ import jwt_decode from "jwt-decode";
 import { logout } from "../redux/reducer/auth";
 import Navbar from "../components/navbar";
 import withAuth from "../components/hoc/withAuth";
-import ModalTopUp from "../components/modalTopUp";
+import ModalTopUp from "../components/ModalTopUp";
 import pictureUser from "../assets/images/dummyAvatar.jpg";
-import graphic from "../assets/Images/graphic.png";
+import graphic from "../assets/images/graphic.png";
 import http from "../helpers/http";
 import Footer from "../components/footer";
 
