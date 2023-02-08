@@ -11,10 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { logout } from "../redux/reducers/authReducers";
-import profile2 from "../assets/images/profile2.png";
+import { logout } from "../redux/reducer/auth";
+import profile2 from "../assets/images/user2.png";
 import Navbar from "../components/navbar";
-import ModalTopUp from "../components/modalTopUp";
+import ModalTopUp from "../components/ModalTopUp";
 import withAuth from "../components/hoc/withAuth";
 import Footer from "../components/footer";
 

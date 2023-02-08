@@ -15,7 +15,7 @@ import lock from '../assets/images/lock.png'
 import download from '../assets/images/download.png'
 import phone3 from '../assets/images/phone-3.png'
 import users from '../assets/images/users.png'
-import Navbar2 from "../components/navbar2";
+import Navbar2 from "../components/Navbar2";
 import Navbar from "../components/navbar";
 
 const LandingPage = () => {
