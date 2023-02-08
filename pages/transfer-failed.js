@@ -12,11 +12,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { logout } from "../redux/reducers/authReducers";
-import profile2 from "../assets/Images/profile2.png";
-import Navbar from "../components/Navbar";
-import ModalTopUp from "../components/ModalTopUp";
+import profile2 from "../assets/images/profile2.png";
+import Navbar from "../components/navbar";
+import ModalTopUp from "../components/modalTopUp";
 import withAuth from "../components/hoc/withAuth";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 const Transfer_Failed = () => {
   const dispatch = useDispatch();

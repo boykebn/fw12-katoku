@@ -17,11 +17,11 @@ import jwt_decode from "jwt-decode";
 
 import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
-import pictureUser from "../assets/Images/dummyAvatar.jpg"
-import ModalTopUp from "../components/ModalTopUp";
-import NavbarHidden from "../components/NavbarHidden";
+import pictureUser from "../assets/images/dummyAvatar.jpg"
+import ModalTopUp from "../components/modalTopUp";
+import NavbarHidden from "../components/navbarHidden";
 import withAuth from "../components/hoc/withAuth";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 const History = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '../components/header'
+// import Header from '../components/header'
 import Footer from '../components/footer'
 import Navbar from '../components/navbar'
 import * as Icon from 'react-feather'
@@ -7,7 +7,7 @@ import Image from 'next/image'
 import users from '../assets/images/users.png'
 import Link from 'next/link'
 
-import Modal from '../components/modal'
+// import Modal from '../components/modal'
 
 const Confirmation = () => {
    return (

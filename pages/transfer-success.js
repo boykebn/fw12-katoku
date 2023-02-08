@@ -16,10 +16,10 @@ import jwt_decode from "jwt-decode";
 
 import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
-import user from "../assets/Images/dummyAvatar.jpg";
-import Navbar from "../components/Navbar";
+import user from "../assets/images/dummyAvatar.jpg";
+import Navbar from "../components/navbar";
 import withAuth from "../components/hoc/withAuth";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 const Transfer_Success = () => {
   const dispatch = useDispatch();

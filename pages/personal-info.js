@@ -12,10 +12,10 @@ import { useRouter } from "next/router";
 
 import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
-import ModalTopUp from "../components/ModalTopUp";
+import ModalTopUp from "../components/modalTopUp";
 import withAuth from "../components/hoc/withAuth";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 const Personal_Info = () => {
   const dispatch = useDispatch();

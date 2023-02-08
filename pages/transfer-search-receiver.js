@@ -17,14 +17,14 @@ import { useRouter } from "next/router";
 
 import { logout } from "../redux/reducer/auth";
 import http from "../helpers/http";
-import NavbarHidden from "../components/NavbarHidden";
-import ModalTopUp from "../components/ModalTopUp";
+import NavbarHidden from "../components/navbarHidden";
+import ModalTopUp from "../components/modalTopUp";
 import withAuth from "../components/hoc/withAuth";
-import profile1 from "../assets/Images/user1.png";
-import profile2 from "../assets/Images/user2.png";
-import profile3 from "../assets/Images/user3.png";
-import profileUser from "../assets/Images/dummyAvatar.jpg";
-import Footer from "../components/Footer";
+import profile1 from "../assets/images/user1.png";
+import profile2 from "../assets/images/user2.png";
+import profile3 from "../assets/images/user3.png";
+import profileUser from "../assets/images/dummyAvatar.jpg";
+import Footer from "../components/footer";
 
 
 const TransferSearchReceiver = () => {

@@ -17,12 +17,12 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 import { logout } from "../redux/reducer/auth";
-import user from "../assets/Images/dummyAvatar.jpg";
-import Navbar from "../components/Navbar";
+import user from "../assets/images/dummyAvatar.jpg";
+import Navbar from "../components/navbar";
 import withAuth from "../components/hoc/withAuth";
-import ModalTopUp from "../components/ModalTopUp";
+import ModalTopUp from "../components/modalTopUp";
 import http from "../helpers/http";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 const Profile = () => {
   const dispatch = useDispatch();
