@@ -79,7 +79,6 @@ const TransferSearchReceiver = () => {
             setTransaction(result)
         }
         else {
-            console.log('hit else')
             setLimit(5)
             fetchTransaction()
         }

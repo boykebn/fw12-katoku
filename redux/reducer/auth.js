@@ -2,10 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { loginAction, registerAction } from "../action/auth";
 
 const initialState = {
-  loading: false,
   token: null,
-  error: null,
-  success: false,
+  loading: false,
+  message: null,
   };
   
   const authReducer = createSlice({
@@ -13,35 +12,40 @@ const initialState = {
     initialState,
     reducers: {
       logout: (state, action) => {
-        state.token = null;
-        state.error = null;
-        state.loading = false;
+        return initialState;
       },
     },
     extraReducers: (build) => {
-      build.addCase(loginAction.pending, ( state, action ) => {
+      build.addCase(loginAction.pending, (state, action) => {
         state.loading = true;
       });
-      build.addCase(loginAction.rejected, ( state, action ) => {
-        state.error = action.payload;
+
+      build.addCase(loginAction.rejected, (state, action) => {
+        state.token = null;
         state.loading = false;
+        state.message = action.error.message;
       });
+
       build.addCase(loginAction.fulfilled, ( state, action ) => {
         state.token = action.payload.token
-        state.error = null;
-        state.loading = false
+        state.loading = false;
+        state.message = action.payload.message;
       });
+
       build.addCase(registerAction.pending, ( state, action ) => {
         state.loading = true;
       });
+
       build.addCase(registerAction.rejected, ( state, action ) => {
-        state.error = action.payload;
+        state.token = null;
         state.loading = false;
+        state.message = action.error.message;
       });
+
       build.addCase(registerAction.fulfilled, ( state, action ) => {
         state.token = action.payload;
-        state.error = null;
         state.loading = false
+        state.message = action.payload.message;
       });
     },
   });

@@ -37,11 +37,12 @@ const History = () => {
   //get transaction history
   const [page, setPage] = useState(1);
   const [transactions, setTransaction] = useState([]);
-  useEffect(() => {
-    const fetchTransactionHistory = async () => {
-      try {
-        const response = await http().get(
-          `/transactions?page=${page}&limit=5`,
+  // console.log(transactions)
+  const [limit, setLimit] = useState(5);
+  const fetchTransactionHistory = async () => {
+    try {
+      const response = await http().get(
+        `/transactions?page=${page}&limit=${limit}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -53,6 +54,7 @@ const History = () => {
         if (error) throw error;
       }
     };
+    useEffect(() => {
     fetchTransactionHistory();
   }, [page]);
 
@@ -66,6 +68,48 @@ const History = () => {
 
   // for top up handle
   const [showModal, setShowModal] = useState(false);
+
+   //sort
+  const sorting = (e) => {
+    const values = e.target.value;
+    setLimit(9000)
+    setPage(1)
+    const data = [...transactions];
+    let result = [null];
+
+    if(values === "ASC") {
+      result = data.sort((a, b) => {
+        const value1 = a.recipientname.toUpperCase();
+        const value2 = b.recipientname.toUpperCase();
+        if (value1 < value2) {
+          return -1;
+        }
+        if (value1 > value2) {
+          return 1;
+        }
+        return 0;
+      })
+      setTransaction(result);
+      console.log(setTransaction)
+    } else if (values === "DESC") {
+      result = data.sort((a, b) => {
+        const value1 = a.recipientname.toUpperCase();
+        const value2 = b.recipientname.toUpperCase();
+        if (value1 > value2) {
+          return -1;
+        }
+        if (value1 < value2) {
+          return 1;
+        }
+        return 0;
+      })
+      setTransaction(result);
+    }
+};
+
+React.useEffect(() =>{
+  fetchTransactionHistory()
+},[page, limit])
 
   return (
     <>
@@ -121,10 +165,10 @@ const History = () => {
             <div className="flex-1 text-[#3A3D42] font-bold text-lg">
               Transaction History
             </div>
-            <select className="bg-[#3A3D421A] py-2 px-6 rounded-lg">
+            <select className="bg-[#3A3D421A] py-2 px-6 rounded-lg" onChange={sorting}>
               <option>-- Select Filter --</option>
-              <option value="ASC">ASC</option>
-              <option value="DESC">DESC</option>
+              <option value={"ASC"}>a - z</option>
+              <option value={"DESC"}>Z - A</option>
             </select>
           </div>
           <div className="text-[#7A7886] text-base mb-8 block md:hidden">
@@ -167,11 +211,11 @@ const History = () => {
               </div>
               {transaction?.recipientId === userInfo.id ? (
                 <div className="text-[#1EC15F] font-bold sm:text-base text-sm flex items-center">
-                  Rp.{Number(transaction?.amount).toLocaleString("id")}{" "}
+                  +Rp.{Number(transaction?.amount).toLocaleString("id")}{" "}
                 </div>
               ) : (
                 <div className="text-[#FF5B37] font-bold sm:text-base text-sm flex items-center">
-                  Rp.{Number(transaction?.amount).toLocaleString("id")}{" "}
+                  -Rp.{Number(transaction?.amount).toLocaleString("id")}{" "}
                 </div>
               )}
             </div>

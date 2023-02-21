@@ -25,23 +25,38 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = () => {
-    // const {error} = useSelector((state)=> state.auth)
+    const {message} = useSelector((state)=> state.auth)
+    // console.log(message)
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth)
     const router = useRouter();
 
-    const handleSubmit = (value) => {
+    const [msgSucces, setMsgSucces] = React.useState("");
+    const [msgFailed, setMsgFailed] = React.useState("")
+
+    const handleSubmit = async  (value) => {
         const email = value.email;
         const password = value.password;
-        dispatch(loginAction({ email, password, cb: () => router.push("/home") }));
+        try {
+          await dispatch(loginAction(
+            { email, password, cb: () => router.push("/home") }
+            ));
+            if (message === 'Rejected') {
+              setMsgFailed(message)
+              setTimeout(() => {
+                setMsgFailed(false)
+              }, 2000);
+            } else {
+              console.log("mashok")
+              setMsgSucces("Login Succes")
+              setTimeout(() => {
+                setMsgSucces(false)
+              }, 10000);
+            }
+        }catch(error) {
+          if (error) throw error
+        }
     };
-
-    // React.useEffect (() => {
-    //   if(token) {
-    //     router.replace('/home')
-    //   }
-    // },[token])
-
 
     return (
         <div>
@@ -60,14 +75,23 @@ const Login = () => {
                         <p className='text-[#3A3D4299] text-lg leading-8'>Transfering money is eassier than ever, you can access KantongKu wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</p>
                     </div>
 
-                    {/* {error? (
+                    {msgFailed? (
                         <div className="alert alert-error shadow-lg">
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                <span>{error}</span>
+                                <span>{msgFailed}</span>
                             </div>
                         </div>
-                    ) : null} */}
+                    ) : null}
+
+                    {msgSucces? (
+                      <div className="alert alert-success shadow-lg">
+                        <div>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span>{msgSucces}</span>
+                        </div>
+                    </div>
+                    ): null}
 
 
                     <Formik initialValues={{

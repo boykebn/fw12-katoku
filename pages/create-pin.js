@@ -73,16 +73,6 @@ const CreatePin = () => {
         //         console.log("masuk if post pin")
                 await http().post('/auth/set-pin', {userId: id, pin: createPin}, {headers: {"authorization" : `Bearer ${token}`}})
                 router.push("/home");
-        //     }
-        //     else{
-        //         console.log("masuk else post pin")
-        //         throw(err)
-        //     }
-
-        // } catch(err){
-        //     console.log("error post")
-            
-        // }
     }
 
     // function tryingPost (idid,pinpin){
