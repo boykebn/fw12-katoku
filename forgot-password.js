@@ -1,4 +1,4 @@
-import Left from '../components/left';
+import Left from './components/left';
 import React from 'react';
 import * as Icon from 'react-feather';
 import Link from 'next/link';

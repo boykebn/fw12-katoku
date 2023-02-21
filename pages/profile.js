@@ -111,7 +111,7 @@ const Profile = () => {
               </div>
             </Link>
             <div>
-              <Link href="/transfer-search-receiver-receiver" className="px-6 flex mb-16">
+              <Link href="/transfer-search-receiver" className="px-6 flex mb-16">
                 <ArrowUp className="mr-6" />
                 <div className="text-lg font-bold	text-[#3A3D42CC]">
                   Transfer

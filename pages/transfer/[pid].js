@@ -87,19 +87,24 @@ const Transfer_Input = () => {
   // console.log(newAmount)
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (newAmount <= balanced?.balance) {
+    if (newAmount <= balanced?.balance && newAmount >= minAmount ) {
       dispatch(
         transferInput({ amount: newAmount, notes: text, recipientId: pid })
       );
+      // setError("kaga boleh tf");
       setShowModal(true)
-    } else if (newAmount <= minAmount) {
-      setError();
-    }else {
+    } else if (newAmount >= minAmount) {
       setError(
         `Please transfer less than Rp. ${Number(
           balanced?.balance
         ).toLocaleString("id")}`
       );
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }else {
+      setError(`The minimum transfer amount is Rp. ${Number
+        (minAmount).toLocaleString("id")}`);
       setTimeout(() => {
         setError(false);
       }, 3000);

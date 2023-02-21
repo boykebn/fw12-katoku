@@ -123,7 +123,8 @@ const History = () => {
             </div>
             <select className="bg-[#3A3D421A] py-2 px-6 rounded-lg">
               <option>-- Select Filter --</option>
-              <option></option>
+              <option value="ASC">ASC</option>
+              <option value="DESC">DESC</option>
             </select>
           </div>
           <div className="text-[#7A7886] text-base mb-8 block md:hidden">

@@ -38,10 +38,11 @@ const TransferSearchReceiver = () => {
   //get all transaction
   const token = useSelector((state) => state.auth.token);
   const [transaction, setTransaction] = useState([]);
+  const [limit, setLimit] = useState(5);
   const fetchTransaction = async () => {
     try {
       const res = await http().get(
-        `/transactions/recipient?page=${page}&limit=5`,
+        `/transactions/recipient?page=${page}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,6 +68,22 @@ const TransferSearchReceiver = () => {
 
   // for top up handle
   const [showModal, setShowModal] = useState(false);
+
+  //search
+    const searching = (e) => {
+        const values = e.target.value
+        if (values.length) {
+            setLimit(9000)
+            const find = [...transaction]
+            const result = (find.filter(data => data.firstName.includes(values) || data.lastName.includes(values)))
+            setTransaction(result)
+        }
+        else {
+            console.log('hit else')
+            setLimit(5)
+            fetchTransaction()
+        }
+    }
 
   return (
     <>
@@ -131,6 +148,7 @@ const TransferSearchReceiver = () => {
               type="text"
               placeholder="Search receiver here"
               className="w-full relative px-14 py-3 bg-[#3A3D421A] rounded-lg"
+              onChange={searching}
             ></input>
             <Search
               className="absolute top-[27%] left-[2.5%]"
